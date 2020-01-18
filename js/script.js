@@ -17,7 +17,7 @@
 			var data = {};
 			yetowohai.find('form').serializeArray().forEach(function(item) { data[item.name] = item.value});
 			
-			//setTimeout(function() {
+			setTimeout(function() {
 				
 				$.post(CtBuilderAjax.ajaxUrl, data, function(response) {
 					
@@ -53,7 +53,7 @@
 					status = 0;
 				});
 
-			//}, 1000);
+			}, 1000);
 
 			//yetowohai.hide();
 		})

@@ -4,18 +4,18 @@
 Plugin Name: Nimbufy for Oxygen
 Author: Gagan S Goraya
 Author URI: https://gagangoraya.com
-Description: BETA. USE AT YOUR OWN RISK.
+Description: Nimbufy for Oxygen lets you generate Oxygen layout out of sections on any web page. BETA. USE AT YOUR OWN RISK.
 Version: 1.0 Beta 1
 */
 
 class NimbufyOxygen {
-
+	const VERSION = '1.0b1';
 	const PREFIX = 'yetowohai';
 	const NONCE_ACTION = self::PREFIX.'_nonce';
 	const API_URL = 'https://server.nimbufy.com/v1/';
 	const SERVICE_URL = self::API_URL.'ui';
 	
-	const TITLE = 'Scraper';
+	const TITLE = 'Nimbufy';
 
 	static function init() {
 
@@ -235,20 +235,20 @@ class NimbufyOxygen {
 		$idToken = self::getIDToken();
 
 		$response = wp_remote_post(
-            self::API_URL.'main',//'http://localhost:3000',//
+            'http://localhost:3000',//self::API_URL.'main',//
             array(
-            	'headers' => array(
-            		'Auth' => $idToken,
-            		'Content-Type' => 'application/json'
-            	),
-                'body' => json_encode(array(
-                    'targeturl'   => $targeturl,
-                    'selector'     => $selector
-                )),
-                // 'body' => array( // this is for local testing
-                //     'targeturl'	=>	$targeturl,
-                //     'selector'	=>	$selector
-                // ),
+            	// 'headers' => array(
+            	// 	'Auth' => $idToken,
+            	// 	'Content-Type' => 'application/json'
+            	// ),
+             //    'body' => json_encode(array(
+             //        'targeturl'   => $targeturl,
+             //        'selector'     => $selector
+             //    )),
+                'body' => array( // this is for local testing
+                    'targeturl'	=>	$targeturl,
+                    'selector'	=>	$selector
+                ),
                 'timeout' => 60
             )
 
@@ -321,7 +321,7 @@ class NimbufyOxygen {
 		}
 
 		if ( defined("OXYGEN_IFRAME") ) {
-			wp_register_script('yetowohai-script', plugins_url('js/script.js', __FILE__), array('ct-angular-main'));
+			wp_register_script('yetowohai-script', plugins_url('js/script.js', __FILE__), array('ct-angular-main'), self::VERSION);
 			wp_localize_script('yetowohai-script', 'yetowohai', array(
 				'title'=> self::TITLE,
 				'slug' => self::PREFIX
@@ -329,7 +329,7 @@ class NimbufyOxygen {
 			wp_enqueue_script('yetowohai-script');
 		}
 
-		wp_enqueue_style('yetowohai-style', plugins_url('css/style.css', __FILE__));
+		wp_enqueue_style('yetowohai-style', plugins_url('css/style.css', __FILE__), array(), self::VERSION);
 	}
 
 	static function component_button() {
