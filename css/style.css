@@ -1,0 +1,54 @@
+#yetowohai {
+	position: fixed;
+	top: 10vw;
+	left: 50vw;
+	margin-left: -250px;
+	width: 500px;
+	z-index:9999;
+	background-color:#4e555c;
+	border-radius: 3px;
+	box-shadow: 2px 2px 6px 1px rgba(0, 0, 0, 0.2);
+	padding: 20px;
+}
+
+div#yetowohai svg.oxygen-close-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #fff;
+}
+
+#yetowohai button.oxygen-sidebar-advanced-subtab:hover {
+	background-color: rgba(36, 42, 50);
+}
+
+div#yetowohai div.yetowohai_status {
+  background: rgba(36, 66, 50);
+  padding: 10px;
+  box-shadow: inset 0 0 3px 1px rgba(0, 1, 0, 0.5);
+  border-radius: 3px;
+  font-size: 14px;
+  color: #ffc;
+  text-shadow: 0 0 12px rgba(0, 255, 0, 0.5);
+}
+div#yetowohai div.yetowohai_status span.complete,
+div#yetowohai div.yetowohai_status span.fail {
+  font-size: 12px;
+}
+div#yetowohai div.yetowohai_status span.progress {
+  animation:blinkingText 1.2s infinite;
+  font-size: 12px;
+}
+@keyframes blinkingText{  
+    0%{     color: #ffc;    }
+    30%{    color:#ffc;  }
+    40%{    color:transparent;  }
+    50%{    color:transparent;  }
+    60%{    color:#ffc;  }
+    100%{   color: #ffc;    }
+}
+
+div.yetowohai_status div.description p.small {
+  font-size: 12px;
+  line-height: 6px;
+}
