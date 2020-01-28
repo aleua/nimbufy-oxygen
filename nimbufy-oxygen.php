@@ -27,7 +27,7 @@ class NimbufyOxygen {
 		
 			// oxygen builder interface
 			add_action("oxygen_basics_components_containers", array(__CLASS__, "component_button")  );
-			add_action("wp_enqueue_scripts", array(__CLASS__, "scripts"));
+			add_action("wp_enqueue_scripts", array(__CLASS__, "scripts"), 11);
 			add_action("wp_footer", array(__CLASS__, "footer"));
 			add_action("wp_ajax_yetowohai_get_component", array(__CLASS__, "get_component"));
 		
@@ -235,20 +235,20 @@ class NimbufyOxygen {
 		$idToken = self::getIDToken();
 
 		$response = wp_remote_post(
-            'http://localhost:3000',//self::API_URL.'main',//
+            self::API_URL.'main',//'http://localhost:3000',//
             array(
-            	// 'headers' => array(
-            	// 	'Auth' => $idToken,
-            	// 	'Content-Type' => 'application/json'
-            	// ),
-             //    'body' => json_encode(array(
-             //        'targeturl'   => $targeturl,
-             //        'selector'     => $selector
-             //    )),
-                'body' => array( // this is for local testing
-                    'targeturl'	=>	$targeturl,
-                    'selector'	=>	$selector
-                ),
+            	'headers' => array(
+            		'Auth' => $idToken,
+            		'Content-Type' => 'application/json'
+            	),
+                'body' => json_encode(array(
+                    'targeturl'   => $targeturl,
+                    'selector'     => $selector
+                )),
+                // 'body' => array( // this is for local testing
+                //     'targeturl'	=>	$targeturl,
+                //     'selector'	=>	$selector
+                // ),
                 'timeout' => 60
             )
 
@@ -261,7 +261,6 @@ class NimbufyOxygen {
         // if authentication failure
         	// self::redirect_to_login();
 
-		
 		header('Content-Type: application/json');
 		
 		echo $response['body'];
@@ -286,7 +285,7 @@ class NimbufyOxygen {
 					<div class="oxygen-control-wrapper">
 						<label class="oxygen-control-label">Target URL</label>
 						<div class="oxygen-measure-box">
-							<input type="text" name="yetowohai_url" id="yetowohai_url" placeholder="target site url" value="https://themes.muffingroup.com/betheme/" />
+							<input type="text" name="yetowohai_url" id="yetowohai_url" placeholder="http://" value="" />
 						</div>
 					</div>
 				</div>
@@ -294,7 +293,7 @@ class NimbufyOxygen {
 					<div class="oxygen-control-wrapper">
 						<label class="oxygen-control-label">Query Selector</label>
 						<div class="oxygen-measure-box">
-							<input type="text" name="yetowohai_selector" id="yetowohai_selector" placeholder="#ID or .classname" value=".mcb-item-623ec056f" />
+							<input type="text" name="yetowohai_selector" id="yetowohai_selector" placeholder="#someid or .classname" value="" />
 						</div>
 					</div>
 				</div>
@@ -328,8 +327,9 @@ class NimbufyOxygen {
 			));
 			wp_enqueue_script('yetowohai-script');
 		}
-
-		wp_enqueue_style('yetowohai-style', plugins_url('css/style.css', __FILE__), array(), self::VERSION);
+		else {
+			wp_enqueue_style('yetowohai-style', plugins_url('css/style.css', __FILE__), array(), self::VERSION);
+		}
 	}
 
 	static function component_button() {
