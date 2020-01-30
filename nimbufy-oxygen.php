@@ -5,11 +5,11 @@ Plugin Name: Nimbufy for Oxygen
 Author: Gagan S Goraya
 Author URI: https://gagangoraya.com
 Description: Nimbufy for Oxygen lets you generate Oxygen layout out of sections on any web page. BETA. USE AT YOUR OWN RISK.
-Version: 1.0 Beta 1
+Version: 1.0 Beta 1.1
 */
 
 class NimbufyOxygen {
-	const VERSION = '1.0b1';
+	const VERSION = '1.0b1.1';
 	const PREFIX = 'yetowohai';
 	const NONCE_ACTION = self::PREFIX.'_nonce';
 	const API_URL = 'https://server.nimbufy.com/v1/';
