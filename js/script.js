@@ -96,9 +96,9 @@
 				
 				$.post(CtBuilderAjax.ajaxUrl, data, function(response) {
 					
-					if(response['errorMessage']) {
+					if(!response || response['errorMessage']) {
 						fail.show();
-						description.append('<p class="error">'+response.errorMessage+'</p>');
+						description.append('<p class="error">'+((response && response.errorMessage)?response.errorMessage:'Unknown error occured')+'</p>');
 					}
  					else {
 

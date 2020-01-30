@@ -134,9 +134,11 @@ class NimbufyOxygen {
 		$body = json_decode($response['body']);
 
 		$stored = false;
-		if($body->AuthenticationResult) {
+		if($body && $body->AuthenticationResult) {
 			self::store_tokens($body->AuthenticationResult);
 			$stored = true;
+		} else {
+			set_transient(self::PREFIX.'login_error', $response, 30);
 		}
 
         wp_redirect(add_query_arg(array('page' => self::PREFIX), admin_url('admin.php')));
@@ -190,6 +192,14 @@ class NimbufyOxygen {
 			<?php
 			
 		} else {
+
+			if(get_transient(self::PREFIX.'login_error')) {
+				?>
+				<h2>Could not login. Below is the response data for debug purposes.</h2>
+				<textarea style="width: 600px; height: 200px; font-size: 12px;"><?php print_r(get_transient(self::PREFIX.'login_error'));?></textarea>
+				<?php
+				delete_transient(self::PREFIX.'login_error');
+			}
 		?>
 		
 			<h3>Log in to use the service</h3>
