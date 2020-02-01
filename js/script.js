@@ -8,7 +8,7 @@
 		var button = yetowohai.find('button');
 		var description = statusPanel.children('.description');
 		var status = 0;
-		
+		var allclasses = null;
 
 		function removeCustomCSSParams(selector, customcss) {
 												    
@@ -28,6 +28,10 @@
 
 		function processParameters(parameters) {
 			for(let k in parameters) {
+				if(parameters[k].indexOf('#MDBIG#') !== -1) {
+					let splitted = parameters[k].split('#MDBIG#');
+					parameters[k] = splitted[1];
+				}
 				if(k.substr(0, 7) === 'nbf_cs_') {
 					let customcss = parameters['custom-css'] || '';
 					customcss = customcss+k.substr(7)+':'+parameters[k]+";\n";
@@ -42,7 +46,7 @@
 
 		function goAllParams(options) {
 			for(let optionKey in options) {
-				if(['ct_id', 'ct_parent', 'ct_selector'].indexOf(optionKey) !== -1) {
+				if(['ct_id', 'ct_parent', 'ct_selector', 'classes'].indexOf(optionKey) !== -1) {
 					continue;
 				}
 				if(optionKey === 'media') {
@@ -67,8 +71,63 @@
 			
 			items.forEach(function(item) {
 				
+
+				let bigclasses = {};
+
+				item.options.classes.forEach(classname => {
+					
+					if(!allclasses[classname] || !allclasses[classname]['original']) {
+						return;
+					}
+					
+					for(let i in allclasses[classname]['original']) {
+						if(allclasses[classname]['original'][i].indexOf('#MDBIG#') !== -1) {
+							let splitted = allclasses[classname]['original'][i].split('#MDBIG#');
+							
+							
+							bigclasses[classname] = bigclasses[classname] || {};
+							bigclasses[classname][i] = parseInt(splitted[0].trim());
+						}
+					}
+
+				})
+
+				for(let classname in bigclasses) {
+						
+					for(let param in bigclasses[classname]) {
+						
+						for(let othclassname in bigclasses) {
+							
+							if(othclassname === classname) {
+								continue; // its the self class
+							}
+
+							// lets take out the smaller ones
+							if(bigclasses[othclassname][param]) {
+								if(bigclasses[othclassname][param] > bigclasses[classname][param]) {
+									delete bigclasses[classname][param];
+								} else {
+									delete bigclasses[othclassname][param];
+								}
+							}
+
+						}
+					}
+
+				}
+
+				for(let classname in bigclasses) {
+					
+					if(Object.keys(bigclasses[classname]).length === 0) {
+						let idx = item.options.classes.indexOf(classname);
+						if(idx > -1) {
+							item.options.classes.splice(idx, 1);
+						}
+					}
+
+				}
+
 				// generate custom-css
-				
 				item.options = goAllParams(item.options);
 
 				if(item.children) {
@@ -101,7 +160,7 @@
 						description.append('<p class="error">'+((response && response.errorMessage)?response.errorMessage:'Unknown error occured')+'</p>');
 					}
  					else {
-
+ 						allclasses = response.oxygen.classes;
  						// process the incoming tree
  						let processedTree = processTree([response.oxygen.component]);
  						response.oxygen.component = processedTree[0];
@@ -242,7 +301,7 @@
 
 			//}, 1000);
 
-			//yetowohai.hide();
+
 		})
 		
 		iframeScope.yetowohaiclose = function() {

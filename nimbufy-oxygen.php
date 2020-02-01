@@ -121,13 +121,11 @@ class NimbufyOxygen {
 		$response = wp_remote_post(
             self::API_URL.'auth',
             array(
-            	//'headers' => array('Content-Type' => 'application/json; charset=utf-8'),
                 'body' => json_encode(array(
                 	'action' => 'login',
                     'username'   => $username,
                     'password'     => $password
-                )),
-                //'timeout' => 30
+                ))
             )
         );
 
@@ -203,7 +201,7 @@ class NimbufyOxygen {
 		?>
 		
 			<h3>Log in to use the service</h3>
-			<form class="yetowohai_login" action="admin-post.php?action=<?php echo self::PREFIX.'_login';?>" method="post">
+			<form class="yetowohai_login" action="admin-post.php?action=<?php echo self::PREFIX.'_login';?>" onSubmit = "this.password.value = btoa(this.password.value); return true; "method="post">
 				<?php
 					wp_nonce_field(self::NONCE_ACTION);
 				?>
